@@ -23,7 +23,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
-    print("Configure Firebase!")
+    #if DEVELOPMENT
+      print("Scheme: Development")
+    #elseif STAGING
+      print("Scheme: Staging")
+    #else
+      print("Scheme: -")
+    #endif
+
     return true
   }
 }
