@@ -11,17 +11,33 @@ import Firebase
 struct UserListView: View {
     @EnvironmentObject var authenticationVM: AuthenticationViewModel
     @State var users: [UserJSON] = []
+    @State var selectedUser: UserJSON? = nil
+    @State var navigateToDetail: Bool = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 4){
-                ForEach(users, id: \.uid) { user in
-                    CardthumView(user: user)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 4){
+                    ForEach(users, id: \.uid) { user in
+                        CardthumView(user: user) {
+                            selectedUser = user
+                            navigateToDetail = true
+                        }
+                    }
+                    Text("Logout")
+                        .onTapGesture {
+                            authenticationVM.logOut()
+                        }
                 }
             }
-        }
-        .onAppear {
-            fetchData()
+            .onAppear {
+                fetchData()
+            }
+            .navigationDestination(isPresented: $navigateToDetail) {
+                if let user = selectedUser {
+                    DetailUserView(user: user)
+                }
+            }
         }
     }
 
@@ -43,13 +59,15 @@ struct UserListView: View {
                 let email = data["email"] as? String ?? ""
                 let gender = data["gender"] as? Int ?? 0
                 let phoneNumber = data["phoneNumber"] as? String ?? ""
+                let imageUrl = data["imageUrl"] as? String ?? ""
 
                 self.users.append(
                     UserJSON(
                         uid: id,
                         email: email,
                         phoneNumber: phoneNumber,
-                        gender: GenderEnum(rawValue: gender)
+                        gender: GenderEnum(rawValue: gender),
+                        imageUrl: imageUrl
                     )
                 )
             }

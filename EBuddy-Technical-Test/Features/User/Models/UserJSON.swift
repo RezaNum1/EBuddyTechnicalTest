@@ -10,6 +10,7 @@ struct UserJSON {
     var email: String?
     var phoneNumber: String?
     var gender: GenderEnum?
+    var imageUrl: String?
 }
 
 enum GenderEnum: Int {

@@ -34,47 +34,20 @@ struct RegisterView: View {
                 }
             }
 
-            TextField("Email", text: $email)
-                .foregroundColor(.black)
-                .textFieldStyle(.roundedBorder)
-                .padding(.bottom, 24)
+            TextFiledLabel(label: "Email", value: $email)
 
-            SecureField("Password", text: $password)
-                .foregroundColor(.black)
-                .textFieldStyle(.roundedBorder)
-                .padding(.bottom, 24)
+            TextFiledLabel(label: "Password", value: $password)
 
-            TextField("Phone Number", text: $phoneNumber)
-                .foregroundColor(.black)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(.numberPad)
-                .padding(.bottom, 24)
+            TextFiledLabel(label: "Phone Number", value: $phoneNumber)
 
-            HStack {
-                Text("Select Gender")
-                    .foregroundColor(.gray)
-                Picker("", selection: $selectedGender) {
-                    Text("Male").tag(1).font(.title)
-                    Text("Female").tag(0).font(.title)
-                }.pickerStyle(SegmentedPickerStyle())
-            }
+            GenderPickerView(label: "Select Gender", value: $selectedGender)
 
-            Button {
+            GeneralButton(action: {
                 hideKeyboard()
                 authenticationVM.register(user: UserJSON(email: email, phoneNumber: phoneNumber, gender: GenderEnum(rawValue: selectedGender)), password: password)
-            } label: {
-                Text("Sign up")
-                    .bold()
-                    .foregroundColor(Color.white)
-                    .frame(width: 200, height: 40)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(isFormFilled ? Color.orange : Color.gray)
-                    )
-                    .disabled(!isFormFilled)
-            }
-            .disabled(!isFormFilled)
+            }, label: "Sign up", isDisabled: !isFormFilled)
             .padding(.top)
+            
             Spacer()
         }
         .padding(.horizontal, 24)

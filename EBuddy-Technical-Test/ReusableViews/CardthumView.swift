@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CardthumView: View {
     var user: UserJSON
+    var onTapAction: () -> Void
     var body: some View {
         VStack(alignment: .leading){
             Text("\(user.email ?? "")")
@@ -27,5 +28,8 @@ struct CardthumView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .border(Color.gray, width: 1)
         .padding(.horizontal, 16)
+        .onTapGesture {
+            onTapAction()
+        }
     }
 }

@@ -16,6 +16,14 @@ class AuthenticationViewModel: ObservableObject {
     @Published var registerError: String = ""
     @Published var loginError: String = ""
 
+    init() {
+        let _ = Auth.auth().addStateDidChangeListener {  _, user in
+            if user != nil {
+                self.isUserLoggedIn.toggle()
+            }
+        }
+    }
+
     func login(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             if let error = error {
@@ -32,7 +40,7 @@ class AuthenticationViewModel: ObservableObject {
                 if let error = error {
                     self?.registerError = error.localizedDescription
                 } else {
-                    self?.firestoreManager.insertDocument(data: ["email": email, "phoneNumber": phoneNumber, "gender": gender.rawValue]) { errorStore in
+                    self?.firestoreManager.insertDocument(data: ["email": email, "phoneNumber": phoneNumber, "gender": gender.rawValue, "imageUrl": ""]) { errorStore in
                         if let errorStore = errorStore {
                             self?.registerError = errorStore.localizedDescription
                         } else {

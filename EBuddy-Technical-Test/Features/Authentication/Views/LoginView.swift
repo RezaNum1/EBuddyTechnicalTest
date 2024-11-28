@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var authenticationVM: AuthenticationViewModel
+    @EnvironmentObject var mainVM: MainViewModel
 
     @State var email: String = ""
     @State var password: String = ""
@@ -41,8 +42,12 @@ struct LoginView: View {
                 .padding(.bottom, 24)
 
             Button {
+                mainVM.showLoader()
                 hideKeyboard()
-                authenticationVM.login(email: email, password: password)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    authenticationVM.login(email: email, password: password)
+                    mainVM.dismissLoader()
+                })
             } label: {
                 Text("Sign In")
                     .bold()

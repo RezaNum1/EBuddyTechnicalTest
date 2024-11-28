@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct ContentView: View {
     @EnvironmentObject var authenticationVM: AuthenticationViewModel
+    @EnvironmentObject var mainVM: MainViewModel
 
     var body: some View {
         ZStack {
@@ -18,17 +19,21 @@ struct ContentView: View {
             } else {
                 LoginView()
             }
+
+            if mainVM.isLoading {
+                ZStack {
+                    Color.orange.opacity(0.1)
+                        .ignoresSafeArea()
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+                .disabled(true)
+            }
         }
         .sheet(isPresented: $authenticationVM.showRegisterPresenter, content: {
             RegisterView()
         })
-        .onAppear {
-            let _ = Auth.auth().addStateDidChangeListener {  _, user in
-                if user != nil {
-                    self.authenticationVM.isUserLoggedIn.toggle()
-                }
-            }
-        }
     }
 }
 
