@@ -36,9 +36,22 @@
 		037D3ED62CF6E6F100D97462 /* EBuddy-Technical-TestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "EBuddy-Technical-TestUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0366AAF02CF8E303006A91F0 /* Exceptions for "EBuddy-Technical-Test" folder in "EBuddy-Technical-Test" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 037D3EBB2CF6E6EF00D97462 /* EBuddy-Technical-Test */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		037D3EBE2CF6E6EF00D97462 /* EBuddy-Technical-Test */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0366AAF02CF8E303006A91F0 /* Exceptions for "EBuddy-Technical-Test" folder in "EBuddy-Technical-Test" target */,
+			);
 			path = "EBuddy-Technical-Test";
 			sourceTree = "<group>";
 		};
@@ -361,6 +374,7 @@
 				DEVELOPMENT_TEAM = 2FT28A9D5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EBuddy-Technical-Test/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -484,6 +498,7 @@
 				DEVELOPMENT_TEAM = 2FT28A9D5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EBuddy-Technical-Test/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -670,6 +685,7 @@
 				DEVELOPMENT_TEAM = 2FT28A9D5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EBuddy-Technical-Test/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -700,6 +716,7 @@
 				DEVELOPMENT_TEAM = 2FT28A9D5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EBuddy-Technical-Test/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

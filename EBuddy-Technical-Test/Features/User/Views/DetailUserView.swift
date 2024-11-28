@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 struct DetailUserView: View {
     @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var userVM: UserViewModel
     var user: UserJSON
 
     @State var email: String = ""
@@ -54,7 +55,7 @@ struct DetailUserView: View {
 
                 GeneralButton(action: {
                     hideKeyboard()
-                    updateData(user: UserJSON(uid: user.uid, email: email, phoneNumber: phoneNumber, gender: GenderEnum(rawValue: selectedGender)))
+                    self.userVM.updateData(user: UserJSON(uid: user.uid, email: email, phoneNumber: phoneNumber, gender: GenderEnum(rawValue: selectedGender)), selectedImage: selectedImage, loaderState: $mainVM.isLoading)
                 }, label: "Save", isDisabled: !isFormFilled)
             }
             .padding(.horizontal, 16)
@@ -64,7 +65,7 @@ struct DetailUserView: View {
             self.phoneNumber = user.phoneNumber ?? ""
             self.selectedGender = user.gender?.rawValue ?? 0
             if self.user.imageUrl != "" {
-                self.retrieveImage()
+                self.userVM.retrieveImage(user: user, selectedImage: $selectedImage, loaderState: $mainVM.isLoading)
             }
         }
         .sheet(isPresented: $isPickerShowing, onDismiss: nil) {
@@ -76,89 +77,5 @@ struct DetailUserView: View {
 
     var isFormFilled: Bool {
         return email != "" && phoneNumber != "" && selectedGender != 99
-    }
-
-    func updateData(user: UserJSON) {
-        let storageRef = Storage.storage().reference()
-
-        // Replace Photo
-        if let prevImageUrl = user.imageUrl, prevImageUrl != "" {
-            let deleteFileRef = storageRef.child(prevImageUrl)
-
-            let _ = deleteFileRef.delete() { error in
-                if error == nil {
-                    return
-                } else {
-                    self.showErrorBanner.toggle()
-                }
-            }
-        }
-
-        // Update New Data & Upload New Image
-        if selectedImage != nil {
-            guard selectedImage != nil else {
-                return
-            }
-
-            let imageData = selectedImage!.jpegData(compressionQuality: 0.8)
-
-            guard imageData != nil else {
-                return
-            }
-
-            let path = "images/\(UUID().uuidString).jpg"
-
-            self.insertImage(path: path, data: imageData) { insertError in
-                if insertError == nil {
-                    self.updateDocument(user: user, path: path)
-                } else {
-                    self.showErrorBanner.toggle()
-                }
-            }
-        } else { // Update Data Without Upload Image
-            self.updateDocument(user: user)
-        }
-    }
-
-    func updateDocument(user: UserJSON, path: String = "") {
-        let firestoreManager = FirestoreManager(collectionName: "USERS")
-        firestoreManager.updateDocument(
-            idRef: user.uid ?? "",
-            data: ["email": user.email ?? "", "phoneNumber": user.phoneNumber ?? "", "gender": user.gender?.rawValue ?? 0, "imageUrl": path]) { updateError in
-                if updateError == nil {
-                    self.showSuccessBanner.toggle()
-                } else {
-                    self.showErrorBanner.toggle()
-                }
-            }
-    }
-
-    func insertImage(path: String, data: Data?, completion: @escaping ((any Error)?) -> Void) {
-        let storageRef = Storage.storage().reference()
-        let fileRef = storageRef.child(path)
-
-        let _ = fileRef.putData(data!, metadata: nil) { _, error in
-            if error != nil {
-                completion(nil)
-            } else {
-                completion(error)
-            }
-        }
-    }
-
-    func retrieveImage() {
-        mainVM.showLoader()
-        let storageRef = Storage.storage().reference()
-        let fileRef = storageRef.child(user.imageUrl ?? "")
-
-        fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-            if let image = UIImage(data: data!), error == nil {
-                self.selectedImage = image
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                mainVM.dismissLoader()
-            })
-        }
     }
 }
