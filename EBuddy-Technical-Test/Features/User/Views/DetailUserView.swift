@@ -47,7 +47,7 @@ struct DetailUserView: View {
 
                     TextFiledLabel(label: "Email", value: $email)
 
-                    TextFiledLabel(label: "Phone Number", value: $phoneNumber)
+                    TextFiledLabel(label: "Phone Number", value: $phoneNumber, textKeyboard: false)
 
                     GenderPickerView(label: "Select Gender", value: $selectedGender)
                 }

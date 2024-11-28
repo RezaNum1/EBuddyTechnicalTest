@@ -10,8 +10,42 @@ import FirebaseStorage
 import FirebaseFirestore
 
 class UserViewModel: ObservableObject {
+    @Published var users: [UserJSON] = []
     @Published var showSuccessBanner: Bool = false
     @Published var showErrorBanner: Bool = false
+
+    let firestoreManager = FirestoreManager(collectionName: "USERS")
+
+    func fetchUsers() {
+        users.removeAll()
+
+        firestoreManager.fetchDocuments { documents, error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
+            }
+
+            for document in documents {
+                let data = document.data()
+
+                let id = document.documentID
+                let email = data["email"] as? String ?? ""
+                let gender = data["gender"] as? Int ?? 0
+                let phoneNumber = data["phoneNumber"] as? String ?? ""
+                let imageUrl = data["imageUrl"] as? String ?? ""
+
+                self.users.append(
+                    UserJSON(
+                        uid: id,
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        gender: GenderEnum(rawValue: gender),
+                        imageUrl: imageUrl
+                    )
+                )
+            }
+        }
+    }
 
     func updateData(user: UserJSON, selectedImage: UIImage?, loaderState: Binding<Bool>) {
         loaderState.wrappedValue = true
@@ -61,12 +95,17 @@ class UserViewModel: ObservableObject {
     }
 
     func updateDocument(user: UserJSON, path: String = "") {
-        let firestoreManager = FirestoreManager(collectionName: "USERS")
+
         firestoreManager.updateDocument(
             idRef: user.uid ?? "",
             data: ["email": user.email ?? "", "phoneNumber": user.phoneNumber ?? "", "gender": user.gender?.rawValue ?? 0, "imageUrl": path]) { [weak self] updateError in
                 if updateError == nil {
                     self?.showSuccessBanner.toggle()
+
+                    if let idx = self?.users.firstIndex(where: { $0.uid == user.uid }) {
+                        self?.users[idx] = user
+                    }
+
                 } else {
                     self?.showErrorBanner.toggle()
                 }

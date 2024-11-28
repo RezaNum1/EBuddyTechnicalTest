@@ -38,7 +38,7 @@ struct RegisterView: View {
 
             TextFiledLabel(label: "Password", value: $password)
 
-            TextFiledLabel(label: "Phone Number", value: $phoneNumber)
+            TextFiledLabel(label: "Phone Number", value: $phoneNumber, textKeyboard: false)
 
             GenderPickerView(label: "Select Gender", value: $selectedGender)
 
