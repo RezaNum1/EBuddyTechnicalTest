@@ -11,10 +11,12 @@ import Firebase
 @main
 struct EBuddy_Technical_TestApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject var authenticationVM: AuthenticationViewModel = AuthenticationViewModel()
 
     var body: some Scene {
         WindowGroup {
-            UserListView()
+            ContentView()
+                .environmentObject(authenticationVM)
         }
     }
 }

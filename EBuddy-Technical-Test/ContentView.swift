@@ -6,15 +6,34 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ContentView: View {
+    @EnvironmentObject var authenticationVM: AuthenticationViewModel
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            if self.authenticationVM.isUserLoggedIn {
+                UserListView()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
+        .sheet(isPresented: $authenticationVM.showRegisterPresenter, content: {
+            RegisterView()
+        })
+        .onAppear {
+            let _ = Auth.auth().addStateDidChangeListener {  _, user in
+                if user != nil {
+                    self.authenticationVM.isUserLoggedIn.toggle()
+                }
+            }
+        }
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
