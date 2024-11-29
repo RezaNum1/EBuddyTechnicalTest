@@ -65,7 +65,7 @@ struct LoginView: View {
             Button{
                 self.authenticationVM.showRegisterPresenter.toggle()
             } label: {
-                Text("Already have an account? Login")
+                Text("Don't have an account? Register")
                     .bold()
                     .foregroundColor(.orange)
             }
