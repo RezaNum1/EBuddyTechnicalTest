@@ -31,6 +31,7 @@ struct UserListView: View {
                             authenticationVM.logOut()
                         }
                 }
+                .background(AppColor.basicBackround)
             }
             .onAppear {
                 if userVM.users.isEmpty {
