@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RegisterView: View {
     @EnvironmentObject var authenticationVM: AuthenticationViewModel
+    @State var name: String = ""
     @State var email: String = ""
     @State var password: String = ""
     @State var phoneNumber: String = ""
@@ -34,17 +35,19 @@ struct RegisterView: View {
                 }
             }
 
+            TextFiledLabel(label: "Name", value: $name)
+
             TextFiledLabel(label: "Email", value: $email)
 
             TextFiledLabel(label: "Password", value: $password)
 
-            TextFiledLabel(label: "Phone Number", value: $phoneNumber, textKeyboard: false)
+            TextFiledLabel(label: "Phone Number", value: $phoneNumber, keyboardType: .number)
 
             GenderPickerView(label: "Select Gender", value: $selectedGender)
 
             GeneralButton(action: {
                 hideKeyboard()
-                authenticationVM.register(user: UserJSON(email: email, phoneNumber: phoneNumber, gender: GenderEnum(rawValue: selectedGender)), password: password)
+                authenticationVM.register(user: UserJSON(name: name, email: email, phoneNumber: phoneNumber, gender: GenderEnum(rawValue: selectedGender)), password: password)
             }, label: "Sign up", isDisabled: !isFormFilled)
             .padding(.top)
             

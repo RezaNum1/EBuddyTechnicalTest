@@ -11,6 +11,7 @@ import FirebaseAuth
 struct ContentView: View {
     @EnvironmentObject var authenticationVM: AuthenticationViewModel
     @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var userVM: UserViewModel
 
     var body: some View {
         ZStack {
@@ -34,6 +35,14 @@ struct ContentView: View {
         .sheet(isPresented: $authenticationVM.showRegisterPresenter, content: {
             RegisterView()
         })
+        .onAppear {
+            let _ = Auth.auth().addStateDidChangeListener {  _, user in
+                if user != nil {
+                    self.authenticationVM.isUserLoggedIn.toggle()
+                    self.userVM.users.removeAll()
+                }
+            }
+        }
     }
 }
 

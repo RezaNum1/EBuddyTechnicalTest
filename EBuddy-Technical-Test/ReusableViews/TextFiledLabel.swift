@@ -10,7 +10,7 @@ import SwiftUI
 struct TextFiledLabel: View {
     var label: String
     @Binding var value: String
-    var textKeyboard: Bool = true
+    var keyboardType: KeyboardType = .text
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
@@ -19,19 +19,29 @@ struct TextFiledLabel: View {
                 .font(.system(size: 18))
                 .padding(.bottom, 2)
 
-            if textKeyboard {
+            if keyboardType == .text {
                 TextField(label, text: $value)
                     .foregroundColor(.black)
                     .textFieldStyle(.roundedBorder)
                     .padding(.bottom, 20)
-            } else {
+            } else if keyboardType == .number {
                 TextField(label, text: $value)
                     .foregroundColor(.black)
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
                     .padding(.bottom, 20)
+            } else if keyboardType == .decimal {
+                TextField(label, text: $value)
+                    .foregroundColor(.black)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.decimalPad)
+                    .padding(.bottom, 20)
             }
-
         }
+    }
+    enum KeyboardType {
+        case text
+        case number
+        case decimal
     }
 }

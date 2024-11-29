@@ -24,6 +24,7 @@ struct UserListView: View {
                             selectedUser = user
                             navigateToDetail = true
                         }
+                        Divider()
                     }
                     Text("Logout")
                         .onTapGesture {
