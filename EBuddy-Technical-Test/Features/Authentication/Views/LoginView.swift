@@ -32,14 +32,14 @@ struct LoginView: View {
             }
 
             TextField("Email", text: $email)
-                .foregroundColor(.black)
                 .textFieldStyle(.roundedBorder)
                 .padding(.bottom, 24)
+                .foregroundColor(AppColor.inputLabel)
 
             SecureField("Password", text: $password)
-                .foregroundColor(.black)
                 .textFieldStyle(.roundedBorder)
                 .padding(.bottom, 24)
+                .foregroundColor(AppColor.inputLabel)
 
             Button {
                 mainVM.showLoader()

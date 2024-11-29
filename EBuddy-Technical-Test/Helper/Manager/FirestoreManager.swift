@@ -35,4 +35,12 @@ class FirestoreManager {
             completion(error)
         }
     }
+
+    func getDocumentByEmail(email: String, run: @escaping ([QueryDocumentSnapshot], (any Error)?) -> Void) {
+        db.collection(collectionName).whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+            if error == nil && snapshot != nil {
+                run(snapshot!.documents, error)
+            }
+        }
+    }
 }

@@ -9,4 +9,5 @@ import SwiftUI
 
 struct AppColor {
     static let basicBackround: Color = Color("BasicBackground")
+    static let inputLabel: Color = Color("InputLabel")
 }

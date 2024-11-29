@@ -23,58 +23,83 @@ class UserViewModel: ObservableObject {
                 return
             }
 
-            for document in documents {
-                let data = document.data()
+            self.basicFetch(documents: documents)
 
-                let id = document.documentID
-                let name = data["name"] as? String ?? ""
-                let email = data["email"] as? String ?? ""
-                let gender = data["gender"] as? Int ?? 0
-                let phoneNumber = data["phoneNumber"] as? String ?? ""
-                let imageUrl = data["imageUrl"] as? String ?? ""
-                let price = data["price"] as? Double ?? 0.0
-                let rating = data["rating"] as? Double ?? 0.0
-                let lastActive = data["lastActive"] as? String ?? ""
+        }
+    }
 
-                if imageUrl != "" {
-                    let storageRef = Storage.storage().reference()
-                    let fileRef = storageRef.child(imageUrl)
+    func sortUsers(loader: Binding<Bool>) {
+        loader.wrappedValue = true
+        let db = Firestore.firestore()
 
-                    fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-                        if let image = UIImage(data: data!), error == nil {
-                            self.users.append(
-                                UserJSON(
-                                    uid: id,
-                                    name: name,
-                                    email: email,
-                                    phoneNumber: phoneNumber,
-                                    gender: GenderEnum(rawValue: gender),
-                                    imageUrl: imageUrl,
-                                    image: image,
-                                    lastActive: lastActive,
-                                    rating: rating,
-                                    price: price
-                                )
-                            )
-                        } else {
-                            print(error)
-                        }
+        db.collection("USERS")
+            .whereField("gender", isEqualTo: 0)
+            .order(by: "lastActive", descending: true)
+            .order(by: "rating", descending: true)
+            .order(by: "price", descending: true)
+            .getDocuments { snapshot, error in
+                if error == nil {
+                    self.users.removeAll()
+                    if let documents = snapshot?.documents {
+                        self.basicFetch(documents: documents)
+                        loader.wrappedValue = false
                     }
                 } else {
-                    self.users.append(
-                        UserJSON(
-                            uid: id,
-                            name: name,
-                            email: email,
-                            phoneNumber: phoneNumber,
-                            gender: GenderEnum(rawValue: gender),
-                            imageUrl: imageUrl,
-                            lastActive: lastActive,
-                            rating: rating,
-                            price: price
-                        )
-                    )
+                    loader.wrappedValue = false
                 }
+            }
+    }
+
+    func basicFetch(documents: [QueryDocumentSnapshot]) {
+        for document in documents {
+            let data = document.data()
+
+            let id = document.documentID
+            let name = data["name"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let gender = data["gender"] as? Int ?? 0
+            let phoneNumber = data["phoneNumber"] as? String ?? ""
+            let imageUrl = data["imageUrl"] as? String ?? ""
+            let price = data["price"] as? Double ?? 0.0
+            let rating = data["rating"] as? Double ?? 0.0
+            let lastActive = data["lastActive"] as? String ?? ""
+
+            if imageUrl != "" {
+                let storageRef = Storage.storage().reference()
+                let fileRef = storageRef.child(imageUrl)
+
+                fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+                    if let image = UIImage(data: data!), error == nil {
+                        self.users.append(
+                            UserJSON(
+                                uid: id,
+                                name: name,
+                                email: email,
+                                phoneNumber: phoneNumber,
+                                gender: GenderEnum(rawValue: gender),
+                                imageUrl: imageUrl,
+                                image: image,
+                                lastActive: lastActive,
+                                rating: rating,
+                                price: price
+                            )
+                        )
+                    }
+                }
+            } else {
+                self.users.append(
+                    UserJSON(
+                        uid: id,
+                        name: name,
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        gender: GenderEnum(rawValue: gender),
+                        imageUrl: imageUrl,
+                        lastActive: lastActive,
+                        rating: rating,
+                        price: price
+                    )
+                )
             }
         }
     }

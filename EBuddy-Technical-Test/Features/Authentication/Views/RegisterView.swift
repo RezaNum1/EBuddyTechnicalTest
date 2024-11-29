@@ -39,7 +39,8 @@ struct RegisterView: View {
 
             TextFiledLabel(label: "Email", value: $email)
 
-            TextFiledLabel(label: "Password", value: $password)
+//            TextFiledLabel(label: "Password", value: $password)
+            PasswordFieldLabel(label: "Password", value: $password)
 
             TextFiledLabel(label: "Phone Number", value: $phoneNumber, keyboardType: .number)
 

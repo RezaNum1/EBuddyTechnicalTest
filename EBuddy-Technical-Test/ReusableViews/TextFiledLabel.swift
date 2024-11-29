@@ -21,18 +21,18 @@ struct TextFiledLabel: View {
 
             if keyboardType == .text {
                 TextField(label, text: $value)
-                    .foregroundColor(.black)
+                    .foregroundColor(AppColor.inputLabel)
                     .textFieldStyle(.roundedBorder)
                     .padding(.bottom, 20)
             } else if keyboardType == .number {
                 TextField(label, text: $value)
-                    .foregroundColor(.black)
+                    .foregroundColor(AppColor.inputLabel)
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
                     .padding(.bottom, 20)
             } else if keyboardType == .decimal {
                 TextField(label, text: $value)
-                    .foregroundColor(.black)
+                    .foregroundColor(AppColor.inputLabel)
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.decimalPad)
                     .padding(.bottom, 20)
